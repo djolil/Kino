@@ -1,9 +1,15 @@
-﻿using Kino.Core.Models.Response;
+﻿using Kino.Core.Models.Common;
+using Kino.Core.Models.Response;
 
 namespace Kino.Core.Interfaces.Service
 {
     public interface IMovieService
     {
-        Task<IEnumerable<MovieBannerResponseModel>> GetHeaderSliderMovies(int count);
+        public Task<IEnumerable<MovieBannerResponse>> GetHeaderSliderMovies(int count);
+        public Task<MovieModel?> GetMovie(int id);
+        public Task<MovieDetailResponse?> GetMovieDetail(int id);
+        public Task<IEnumerable<MovieSearchResultResponse>?> GetMoviesByName(string name);
+        public Task<bool> AddMovie(MovieModel movieModel);
+        public Task<bool> UpdateMovie(MovieModel movieModel);
     }
 }

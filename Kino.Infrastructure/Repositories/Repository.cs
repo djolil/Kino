@@ -35,16 +35,16 @@ namespace Kino.Infrastructure.Repositories
             return count == 0 ? await _entities.Where(predicate).ToListAsync() : await _entities.Where(predicate).Take(count).ToListAsync();
         }
 
-        public virtual async Task AddAsync(TEntity entity)
+        public virtual async Task<bool> AddAsync(TEntity entity)
         {
             await _entities.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        public virtual async Task<bool> AddRangeAsync(IEnumerable<TEntity> entities)
         {
             await _entities.AddRangeAsync(entities);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public virtual async Task<bool> AnyAsync()
@@ -57,22 +57,22 @@ namespace Kino.Infrastructure.Repositories
             return await _entities.AnyAsync(predicate);
         }
 
-        public virtual async Task RemoveAsync(TEntity entity)
+        public virtual async Task<bool> RemoveAsync(TEntity entity)
         {
             _entities.Remove(entity);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task RemoveRangeAsync(IEnumerable<TEntity> entities)
+        public virtual async Task<bool> RemoveRangeAsync(IEnumerable<TEntity> entities)
         {
             _entities.RemoveRange(entities);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task UpdateAsync(TEntity entity)
+        public virtual async Task<bool> UpdateAsync(TEntity entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
