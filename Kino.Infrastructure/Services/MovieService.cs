@@ -117,7 +117,7 @@ namespace Kino.Infrastructure.Services
         public async Task<IEnumerable<MovieSearchResultResponse>?> GetMoviesByName(string name)
         {
             var movies = await _movieRepository.FindAsync(x => x.Title.ToUpper().Contains(name.ToUpper()));
-            if (movies == null) 
+            if (movies == null || !movies.Any())
                 return null;
             var response = movies.Select(x => new MovieSearchResultResponse
             {
@@ -167,6 +167,11 @@ namespace Kino.Infrastructure.Services
             movie.AgeRating = movieModel.AgeRating;
             movie.MediaSource = movieModel.MediaSource;
             return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> MovieExists(int id)
+        {
+            return await _movieRepository.AnyAsync(x => x.Id == id);
         }
     }
 }

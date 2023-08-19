@@ -30,6 +30,9 @@ builder.Services.AddDbContext<KinoContext>(
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 
+builder.Services.AddScoped<IMovieCastRepository, MovieCastRepository>();
+builder.Services.AddScoped<IMovieCastService, MovieCastService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

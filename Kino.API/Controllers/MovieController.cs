@@ -70,8 +70,10 @@ namespace Kino.API.Controllers
         {
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
-            if (await _movieService.UpdateMovie(movie) == false)
+            if (await _movieService.MovieExists(movie.Id) == false)
                 return NotFound();
+            if (await _movieService.UpdateMovie(movie) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
             return NoContent();
         }
 
