@@ -6,6 +6,8 @@ namespace Kino.Core.Interfaces.Service
     {
         public Task<IEnumerable<GenderResponse>> GetAllGenders();
         public Task<IEnumerable<DepartmentResponse>> GetAllDepartments();
+        public Task<IEnumerable<LanguageResponse>> GetAllLanguages();
+        public Task<IEnumerable<LanguageRoleResponse>> GetAllLanguageRoles();
         public Task<IEnumerable<PersonResponse>?> GetPeopleByName(string name);
     }
 }

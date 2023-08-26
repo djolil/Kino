@@ -8,12 +8,16 @@ namespace Kino.Infrastructure.Services
     {
         private readonly IGenderRepository _genderRepository;
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly ILanguageRepository _languageRepository;
+        private readonly ILanguageRoleRepository _languageRoleRepository;
         private readonly IPersonRepository _personRepository;
 
-        public CommonService(IGenderRepository genderRepository, IDepartmentRepository departmentRepository, IPersonRepository personRepository)
+        public CommonService(IGenderRepository genderRepository, IDepartmentRepository departmentRepository, ILanguageRepository languageRepository, ILanguageRoleRepository languageRoleRepository, IPersonRepository personRepository)
         {
             _genderRepository = genderRepository;
             _departmentRepository = departmentRepository;
+            _languageRepository = languageRepository;
+            _languageRoleRepository = languageRoleRepository;
             _personRepository = personRepository;
         }
 
@@ -35,6 +39,29 @@ namespace Kino.Infrastructure.Services
             {
                 Id = x.Id,
                 DepartmentName = x.DepartmentName
+            });
+            return response;
+        }
+
+        public async Task<IEnumerable<LanguageResponse>> GetAllLanguages()
+        {
+            var languages = await _languageRepository.GetAllAsync();
+            var response = languages.Select(x => new LanguageResponse
+            {
+                Id = x.Id,
+                LanguageCode = x.LanguageCode,
+                LanguageName = x.LanguageName
+            });
+            return response;
+        }
+
+        public async Task<IEnumerable<LanguageRoleResponse>> GetAllLanguageRoles()
+        {
+            var roles = await _languageRoleRepository.GetAllAsync();
+            var response = roles.Select(x => new LanguageRoleResponse
+            {
+                Id = x.Id,
+                LanguageRole1 = x.LanguageRole1
             });
             return response;
         }

@@ -30,6 +30,22 @@ namespace Kino.API.Controllers
             return Ok(departments);
         }
 
+        // GET: api/Language
+        [HttpGet("Language")]
+        public async Task<ActionResult> GetLanguages()
+        {
+            var languages = await _commonService.GetAllLanguages();
+            return Ok(languages);
+        }
+
+        // GET: api/LanguageRole
+        [HttpGet("LanguageRole")]
+        public async Task<ActionResult> GetLanguageRoles()
+        {
+            var roles = await _commonService.GetAllLanguageRoles();
+            return Ok(roles);
+        }
+
         // GET: api/Person/Search/Абвгд
         [HttpGet("Person/Search/{name}")]
         public async Task<ActionResult> GetSearchPeopleResult(string name)
