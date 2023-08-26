@@ -7,11 +7,13 @@ namespace Kino.Infrastructure.Services
     public class CommonService : ICommonService
     {
         private readonly IGenderRepository _genderRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IPersonRepository _personRepository;
 
-        public CommonService(IGenderRepository genderRepository, IPersonRepository personRepository)
+        public CommonService(IGenderRepository genderRepository, IDepartmentRepository departmentRepository, IPersonRepository personRepository)
         {
             _genderRepository = genderRepository;
+            _departmentRepository = departmentRepository;
             _personRepository = personRepository;
         }
 
@@ -22,6 +24,17 @@ namespace Kino.Infrastructure.Services
             {
                 Id = x.Id,
                 Gender1 = x.Gender1
+            });
+            return response;
+        }
+
+        public async Task<IEnumerable<DepartmentResponse>> GetAllDepartments()
+        {
+            var departments = await _departmentRepository.GetAllAsync();
+            var response = departments.Select(x => new DepartmentResponse
+            {
+                Id = x.Id,
+                DepartmentName = x.DepartmentName
             });
             return response;
         }

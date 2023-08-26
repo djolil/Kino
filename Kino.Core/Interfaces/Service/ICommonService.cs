@@ -5,6 +5,7 @@ namespace Kino.Core.Interfaces.Service
     public interface ICommonService
     {
         public Task<IEnumerable<GenderResponse>> GetAllGenders();
+        public Task<IEnumerable<DepartmentResponse>> GetAllDepartments();
         public Task<IEnumerable<PersonResponse>?> GetPeopleByName(string name);
     }
 }

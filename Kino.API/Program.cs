@@ -33,7 +33,11 @@ builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<IMovieCastRepository, MovieCastRepository>();
 builder.Services.AddScoped<IMovieCastService, MovieCastService>();
 
+builder.Services.AddScoped<IMovieCrewRepository, MovieCrewRepository>();
+builder.Services.AddScoped<IMovieCrewService, MovieCrewService>();
+
 builder.Services.AddScoped<IGenderRepository, GenderRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<ICommonService, CommonService>();
 

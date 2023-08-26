@@ -22,6 +22,14 @@ namespace Kino.API.Controllers
             return Ok(genders);
         }
 
+        // GET: api/Department
+        [HttpGet("Department")]
+        public async Task<ActionResult> GetDepartments()
+        {
+            var departments = await _commonService.GetAllDepartments();
+            return Ok(departments);
+        }
+
         // GET: api/Person/Search/Абвгд
         [HttpGet("Person/Search/{name}")]
         public async Task<ActionResult> GetSearchPeopleResult(string name)
