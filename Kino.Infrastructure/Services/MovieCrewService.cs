@@ -41,5 +41,22 @@ namespace Kino.Infrastructure.Services
             };
             return await _movieCrewRepository.AddAsync(crew);
         }
+
+        public async Task<bool> DeleteMovieCrew(MovieCrewRequest movieCrewRequest)
+        {
+            var crew = await _movieCrewRepository.SingleOrDefaultAsync(x => x.MovieId == movieCrewRequest.MovieId
+                                                                            && x.PersonId == movieCrewRequest.PersonId
+                                                                            && x.DepartmentId == movieCrewRequest.DepartmentId);
+            if (crew == null)
+                return false;
+            return await _movieCrewRepository.RemoveAsync(crew);
+        }
+
+        public async Task<bool> MovieCrewExists(MovieCrewRequest movieCrewRequest)
+        {
+            return await _movieCrewRepository.AnyAsync(x => x.MovieId == movieCrewRequest.MovieId
+                                                            && x.PersonId == movieCrewRequest.PersonId
+                                                            && x.DepartmentId == movieCrewRequest.DepartmentId);
+        }
     }
 }

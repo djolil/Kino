@@ -48,5 +48,16 @@ namespace Kino.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return NoContent();
         }
+
+        // DELETE: api/MovieCast
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMovieCast(MovieCastModel cast)
+        {
+            if (await _movieCastService.MovieCastExists(cast) == false)
+                return NotFound();
+            if (await _movieCastService.DeleteMovieCast(cast) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return NoContent();
+        }
     }
 }

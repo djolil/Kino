@@ -11,6 +11,7 @@ namespace Kino.Core.Interfaces.Service
         public Task<IEnumerable<MovieSearchResultResponse>?> GetMoviesByName(string name);
         public Task<bool> AddMovie(MovieModel movieModel);
         public Task<bool> UpdateMovie(MovieModel movieModel);
+        public Task<bool> DeleteMovie(int id);
         public Task<bool> MovieExists(int id);
     }
 }

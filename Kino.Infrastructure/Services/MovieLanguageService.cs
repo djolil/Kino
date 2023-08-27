@@ -41,5 +41,22 @@ namespace Kino.Infrastructure.Services
             };
             return await _movieLanguageRepository.AddAsync(language);
         }
+
+        public async Task<bool> DeleteMovieLanguage(MovieLanguageRequest movieLanguageRequest)
+        {
+            var language = await _movieLanguageRepository.SingleOrDefaultAsync(x => x.MovieId == movieLanguageRequest.MovieId
+                                                                            && x.LanguageId == movieLanguageRequest.LanguageId
+                                                                            && x.LanguageRoleId == movieLanguageRequest.LanguageRoleId);
+            if (language == null)
+                return false;
+            return await _movieLanguageRepository.RemoveAsync(language);
+        }
+
+        public async Task<bool> MovieLanguageExists(MovieLanguageRequest movieLanguageRequest)
+        {
+            return await _movieLanguageRepository.AnyAsync(x => x.MovieId == movieLanguageRequest.MovieId
+                                                            && x.LanguageId == movieLanguageRequest.LanguageId
+                                                            && x.LanguageRoleId == movieLanguageRequest.LanguageRoleId);
+        }
     }
 }

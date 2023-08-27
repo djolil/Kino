@@ -55,6 +55,16 @@ namespace Kino.Infrastructure.Services
             return await _movieCastRepository.UpdateAsync(cast);
         }
 
+        public async Task<bool> DeleteMovieCast(MovieCastModel movieCastModel)
+        {
+            var cast = await _movieCastRepository.SingleOrDefaultAsync(x => x.MovieId == movieCastModel.MovieId
+                                                                            && x.PersonId == movieCastModel.PersonId
+                                                                            && x.GenderId == movieCastModel.GenderId);
+            if (cast == null)
+                return false;
+            return await _movieCastRepository.RemoveAsync(cast);
+        }
+
         public async Task<bool> MovieCastExists(MovieCastModel movieCastModel)
         {
             return await _movieCastRepository.AnyAsync(x => x.MovieId == movieCastModel.MovieId

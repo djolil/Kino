@@ -169,6 +169,14 @@ namespace Kino.Infrastructure.Services
             return await _movieRepository.UpdateAsync(movie);
         }
 
+        public async Task<bool> DeleteMovie(int id)
+        {
+            var movie = await _movieRepository.GetAsync(id);
+            if (movie == null)
+                return false;
+            return await _movieRepository.RemoveAsync(movie);
+        }
+
         public async Task<bool> MovieExists(int id)
         {
             return await _movieRepository.AnyAsync(x => x.Id == id);

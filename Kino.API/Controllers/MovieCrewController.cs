@@ -35,5 +35,16 @@ namespace Kino.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
         }
+
+        // DELETE: api/MovieCrew
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMovieCrew(MovieCrewRequest crew)
+        {
+            if (await _movieCrewService.MovieCrewExists(crew) == false)
+                return NotFound();
+            if (await _movieCrewService.DeleteMovieCrew(crew) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return NoContent();
+        }
     }
 }

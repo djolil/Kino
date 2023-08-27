@@ -7,5 +7,7 @@ namespace Kino.Core.Interfaces.Service
     {
         public Task<IEnumerable<MovieCrewDetailResponse>?> GetMovieCrewsDetailsByMovieId(int id);
         public Task<bool> AddMovieCrew(MovieCrewRequest movieCrewRequest);
+        public Task<bool> DeleteMovieCrew(MovieCrewRequest movieCrewRequest);
+        public Task<bool> MovieCrewExists(MovieCrewRequest movieCrewRequest);
     }
 }

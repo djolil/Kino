@@ -35,5 +35,16 @@ namespace Kino.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
         }
+
+        // DELETE: api/MovieLanguage
+        [HttpDelete]
+        public async Task<IActionResult> DeleteMovieLanguage(MovieLanguageRequest language)
+        {
+            if (await _movieLanguageService.MovieLanguageExists(language) == false)
+                return NotFound();
+            if (await _movieLanguageService.DeleteMovieLanguage(language) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return NoContent();
+        }
     }
 }
