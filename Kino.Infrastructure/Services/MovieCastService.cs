@@ -8,22 +8,24 @@ namespace Kino.Infrastructure.Services
     public class MovieCastService : IMovieCastService
     {
         private readonly IMovieCastRepository _movieCastRepository;
+        private readonly IGenderRepository _genderRepository;
 
-        public MovieCastService(IMovieCastRepository movieCastRepository)
+        public MovieCastService(IMovieCastRepository movieCastRepository, IGenderRepository genderRepository)
         {
             _movieCastRepository = movieCastRepository;
+            _genderRepository = genderRepository;
         }
 
         public async Task<IEnumerable<MovieCastModel>?> GetMovieCastsByMovieId(int id)
         {
-            var casts = await _movieCastRepository.FindAsync(x => x.MovieId == id);
+            var casts = await _movieCastRepository.GetMovieCastsByMovieId(id);
             if (casts == null || !casts.Any())
                 return null;
             var response = casts.Select(x => new MovieCastModel
             {
                 MovieId = x.MovieId,
                 PersonId = x.PersonId,
-                GenderId = x.GenderId,
+                Gender = x.Gender.Gender1,
                 CharacterName = x.CharacterName,
                 CastOrder = x.CastOrder
             });
@@ -32,11 +34,14 @@ namespace Kino.Infrastructure.Services
 
         public async Task<bool> AddMovieCast(MovieCastModel movieCastModel)
         {
+            var gender = await _genderRepository.SingleOrDefaultAsync(x => x.Gender1 == movieCastModel.Gender);
+            if (gender == null) 
+                return false;
             var cast = new MovieCast
             {
                 MovieId = movieCastModel.MovieId,
                 PersonId = movieCastModel.PersonId,
-                GenderId = movieCastModel.GenderId,
+                GenderId = gender.Id,
                 CharacterName = movieCastModel.CharacterName,
                 CastOrder = movieCastModel.CastOrder
             };
@@ -45,9 +50,12 @@ namespace Kino.Infrastructure.Services
 
         public async Task<bool> UpdateMovieCast(MovieCastModel movieCastModel)
         {
+            var gender = await _genderRepository.SingleOrDefaultAsync(x => x.Gender1 == movieCastModel.Gender);
+            if (gender == null)
+                return false;
             var cast = await _movieCastRepository.SingleOrDefaultAsync(x => x.MovieId == movieCastModel.MovieId
                                                                             && x.PersonId == movieCastModel.PersonId
-                                                                            && x.GenderId == movieCastModel.GenderId);
+                                                                            && x.GenderId == gender.Id);
             if (cast == null) 
                 return false;
             cast.CharacterName = movieCastModel.CharacterName;
@@ -57,9 +65,12 @@ namespace Kino.Infrastructure.Services
 
         public async Task<bool> DeleteMovieCast(MovieCastModel movieCastModel)
         {
+            var gender = await _genderRepository.SingleOrDefaultAsync(x => x.Gender1 == movieCastModel.Gender);
+            if (gender == null)
+                return false;
             var cast = await _movieCastRepository.SingleOrDefaultAsync(x => x.MovieId == movieCastModel.MovieId
                                                                             && x.PersonId == movieCastModel.PersonId
-                                                                            && x.GenderId == movieCastModel.GenderId);
+                                                                            && x.GenderId == gender.Id);
             if (cast == null)
                 return false;
             return await _movieCastRepository.RemoveAsync(cast);
@@ -67,9 +78,12 @@ namespace Kino.Infrastructure.Services
 
         public async Task<bool> MovieCastExists(MovieCastModel movieCastModel)
         {
+            var gender = await _genderRepository.SingleOrDefaultAsync(x => x.Gender1 == movieCastModel.Gender);
+            if (gender == null)
+                return false;
             return await _movieCastRepository.AnyAsync(x => x.MovieId == movieCastModel.MovieId
                                                             && x.PersonId == movieCastModel.PersonId
-                                                            && x.GenderId == movieCastModel.GenderId);
+                                                            && x.GenderId == gender.Id);
         }
     }
 }

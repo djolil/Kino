@@ -2,20 +2,20 @@
 using Kino.Core.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Kino.API.Controllers
+namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MovieCastController : ControllerBase
+    public class MovieCastAdminController : ControllerBase
     {
         private readonly IMovieCastService _movieCastService;
 
-        public MovieCastController(IMovieCastService movieCastService)
+        public MovieCastAdminController(IMovieCastService movieCastService)
         {
             _movieCastService = movieCastService;
         }
 
-        // GET: api/MovieCast/Search/1
+        // GET: api/MovieCastAdmin/Search/1
         [HttpGet("Search/{id}")]
         public async Task<ActionResult> GetMovieCastsByMovie(int id)
         {
@@ -25,7 +25,7 @@ namespace Kino.API.Controllers
             return Ok(casts);
         }
 
-        // POST: api/MovieCast
+        // POST: api/MovieCastAdmin
         [HttpPost]
         public async Task<ActionResult> AddMovieCast(MovieCastModel cast)
         {
@@ -36,7 +36,7 @@ namespace Kino.API.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        // PUT: api/MovieCast
+        // PUT: api/MovieCastAdmin
         [HttpPut]
         public async Task<IActionResult> UpdateMovieCast(MovieCastModel cast)
         {
@@ -49,7 +49,7 @@ namespace Kino.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/MovieCast
+        // DELETE: api/MovieCastAdmin
         [HttpDelete]
         public async Task<IActionResult> DeleteMovieCast(MovieCastModel cast)
         {

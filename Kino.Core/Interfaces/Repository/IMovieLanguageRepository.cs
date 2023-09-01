@@ -4,6 +4,6 @@ namespace Kino.Core.Interfaces.Repository
 {
     public interface IMovieLanguageRepository : IRepository<MovieLanguage>
     {
-        public Task<IEnumerable<MovieLanguage>?> GetMovieLanguagesDetailsByMovieId(int id);
+        public Task<IEnumerable<MovieLanguage>?> GetMovieLanguagesByMovieId(int id);
     }
 }

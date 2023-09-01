@@ -14,7 +14,7 @@ namespace Kino.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<MovieLanguage>?> GetMovieLanguagesDetailsByMovieId(int id)
+        public async Task<IEnumerable<MovieLanguage>?> GetMovieLanguagesByMovieId(int id)
         {
             return await _context.MovieLanguages
                                     .Include(x => x.Language)

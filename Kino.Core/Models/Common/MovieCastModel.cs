@@ -6,7 +6,7 @@
 
         public int PersonId { get; set; }
 
-        public int GenderId { get; set; }
+        public string Gender { get; set; } = null!;
 
         public string CharacterName { get; set; } = null!;
 

@@ -34,12 +34,12 @@
 
         public IEnumerable<MovieLanguageResponse> MovieLanguages { get; set; } = null!;
 
-        public IEnumerable<ProductionCompanyResponse> Companies { get; set; } = null!;
+        public IEnumerable<string> Companies { get; set; } = null!;
 
-        public IEnumerable<CountryResponse> Countries { get; set; } = null!;
+        public IEnumerable<string> Countries { get; set; } = null!;
 
-        public IEnumerable<GenreResponse> Genres { get; set; } = null!;
+        public IEnumerable<string> Genres { get; set; } = null!;
 
-        public IEnumerable<KeywordResponse> Keywords { get; set; } = null!;
+        public IEnumerable<string> Keywords { get; set; } = null!;
     }
 }

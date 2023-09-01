@@ -8,8 +8,6 @@
 
         public string PersonName { get; set; } = null!;
 
-        public int DepartmentId { get; set; }
-
-        public string DepartmentName { get; set; } = null!;
+        public string Department { get; set; } = null!;
     }
 }

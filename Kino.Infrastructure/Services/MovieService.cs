@@ -82,34 +82,17 @@ namespace Kino.Infrastructure.Services
                 {
                     PersonId = x.PersonId,
                     PersonName = x.Person.PersonName,
-                    DepartmentId = x.DepartmentId
+                    Department = x.Department.DepartmentName
                 }),
                 MovieLanguages = movie.MovieLanguages.Select(x => new MovieLanguageResponse
                 {
-                    LanguageName = x.Language.LanguageName,
-                    LanguageRoleId = x.LanguageRoleId
+                    Language = x.Language.LanguageName,
+                    LanguageRole = x.LanguageRole.LanguageRole1
                 }),
-                Companies = movie.Companies.Select(x => new ProductionCompanyResponse
-                {
-                    Id = x.Id,
-                    CompanyName = x.CompanyName
-                }),
-                Countries = movie.Countries.Select(x => new CountryResponse
-                {
-                    Id = x.Id,
-                    CountryIsoCode = x.CountryIsoCode,
-                    CountryName = x.CountryName
-                }),
-                Genres = movie.Genres.Select(x => new GenreResponse
-                {
-                    Id = x.Id,
-                    GenreName = x.GenreName
-                }),
-                Keywords = movie.Keywords.Select(x => new KeywordResponse
-                {
-                    Id = x.Id,
-                    KeywordName = x.KeywordName
-                })
+                Companies = movie.Companies.Select(x => x.CompanyName),
+                Countries = movie.Countries.Select(x => x.CountryName),
+                Genres = movie.Genres.Select(x => x.GenreName),
+                Keywords = movie.Keywords.Select(x => x.KeywordName)
             };
             return response;
         }

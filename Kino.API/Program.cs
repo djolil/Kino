@@ -39,12 +39,15 @@ builder.Services.AddScoped<IMovieCrewService, MovieCrewService>();
 builder.Services.AddScoped<IMovieLanguageRepository, MovieLanguageRepository>();
 builder.Services.AddScoped<IMovieLanguageService, MovieLanguageService>();
 
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IPersonService, PersonService>();
+
 builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();
 builder.Services.AddScoped<ILanguageRoleRepository, LanguageRoleRepository>();
-builder.Services.AddScoped<IPersonRepository, PersonRepository>();
-builder.Services.AddScoped<ICommonService, CommonService>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 
 var app = builder.Build();
 

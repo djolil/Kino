@@ -2,20 +2,20 @@
 using Kino.Core.Models.Request;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Kino.API.Controllers
+namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MovieCrewController : ControllerBase
+    public class MovieCrewAdminController : ControllerBase
     {
         private readonly IMovieCrewService _movieCrewService;
 
-        public MovieCrewController(IMovieCrewService movieCrewService)
+        public MovieCrewAdminController(IMovieCrewService movieCrewService)
         {
             _movieCrewService = movieCrewService;
         }
 
-        // GET: api/MovieCrew/Search/1
+        // GET: api/MovieCrewAdmin/Search/1
         [HttpGet("Search/{id}")]
         public async Task<ActionResult> GetMovieCrewsDetailsByMovie(int id)
         {
@@ -25,7 +25,7 @@ namespace Kino.API.Controllers
             return Ok(crews);
         }
 
-        // POST: api/MovieCrew
+        // POST: api/MovieCrewAdmin
         [HttpPost]
         public async Task<ActionResult> AddMovieCrew(MovieCrewRequest crew)
         {
@@ -36,7 +36,7 @@ namespace Kino.API.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        // DELETE: api/MovieCrew
+        // DELETE: api/MovieCrewAdmin
         [HttpDelete]
         public async Task<IActionResult> DeleteMovieCrew(MovieCrewRequest crew)
         {
