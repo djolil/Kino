@@ -2,6 +2,7 @@
 using Kino.Core.Interfaces.Repository;
 using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Common;
+using Kino.Core.Models.Request;
 using Kino.Core.Models.Response;
 
 namespace Kino.Infrastructure.Services
@@ -9,10 +10,22 @@ namespace Kino.Infrastructure.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IKeywordRepository _keywordRepository;
+        private readonly ICompanyRepository _companyRepository;
 
-        public MovieService(IMovieRepository movieRepository)
+        public MovieService(IMovieRepository movieRepository, 
+                            ICountryRepository countryRepository,
+                            IGenreRepository genreRepository,
+                            IKeywordRepository keywordRepository,
+                            ICompanyRepository companyRepository)
         {
             _movieRepository = movieRepository;
+            _countryRepository = countryRepository;
+            _genreRepository = genreRepository;
+            _keywordRepository = keywordRepository;
+            _companyRepository = companyRepository;
         }
 
         public async Task<IEnumerable<MovieBannerResponse>> GetHeaderSliderMovies(int count)
@@ -112,6 +125,42 @@ namespace Kino.Infrastructure.Services
             return response;
         }
 
+        public async Task<IEnumerable<string>?> GetCountriesByMovieId(int id)
+        {
+            var movie = await _movieRepository.GetMovieDetail(id);
+            if (movie == null || movie.Countries == null || !movie.Countries.Any())
+                return null;
+            var response = movie.Countries.Select(x => x.CountryName);
+            return response;
+        }
+
+        public async Task<IEnumerable<string>?> GetGenresByMovieId(int id)
+        {
+            var movie = await _movieRepository.GetMovieDetail(id);
+            if (movie == null || movie.Genres == null || !movie.Genres.Any())
+                return null;
+            var response = movie.Genres.Select(x => x.GenreName);
+            return response;
+        }
+
+        public async Task<IEnumerable<string>?> GetKeywordsByMovieId(int id)
+        {
+            var movie = await _movieRepository.GetMovieDetail(id);
+            if (movie == null || movie.Keywords == null || !movie.Keywords.Any())
+                return null;
+            var response = movie.Keywords.Select(x => x.KeywordName);
+            return response;
+        }
+
+        public async Task<IEnumerable<string>?> GetCompaniesByMovieId(int id)
+        {
+            var movie = await _movieRepository.GetMovieDetail(id);
+            if (movie == null || movie.Companies == null || !movie.Companies.Any())
+                return null;
+            var response = movie.Companies.Select(x => x.CompanyName);
+            return response;
+        }
+
         public async Task<bool> AddMovie(MovieModel movieModel)
         {
             var movie = new Movie
@@ -130,6 +179,66 @@ namespace Kino.Infrastructure.Services
                 MediaSource = movieModel.MediaSource
             };
             return await _movieRepository.AddAsync(movie);
+        }
+
+        public async Task<bool> AddCountries(CountriesRequest countriesRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(countriesRequest.MovieId);
+            if (movie == null)
+                return false;
+            foreach (var countryName in countriesRequest.Countries)
+            {
+                var country = await _countryRepository.SingleOrDefaultAsync(x => x.CountryName == countryName);
+                if (country == null)
+                    return false;
+                else movie.Countries.Add(country);
+            }
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> AddGenres(GenresRequest genresRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(genresRequest.MovieId);
+            if (movie == null)
+                return false;
+            foreach (var genreName in genresRequest.Genres)
+            {
+                var genre = await _genreRepository.SingleOrDefaultAsync(x => x.GenreName == genreName);
+                if (genre == null)
+                    return false;
+                else movie.Genres.Add(genre);
+            }
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> AddKeywords(KeywordsRequest keywordsRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(keywordsRequest.MovieId);
+            if (movie == null)
+                return false;
+            foreach (var keywordName in keywordsRequest.Keywords)
+            {
+                var keyword = await _keywordRepository.SingleOrDefaultAsync(x => x.KeywordName == keywordName);
+                if (keyword == null)
+                    return false;
+                else movie.Keywords.Add(keyword);
+            }
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> AddCompanies(CompaniesRequest companiesRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(companiesRequest.MovieId);
+            if (movie == null)
+                return false;
+            foreach (var companyName in companiesRequest.Companies)
+            {
+                var company = await _companyRepository.SingleOrDefaultAsync(x => x.CompanyName == companyName);
+                if (company == null)
+                    return false;
+                else movie.Companies.Add(company);
+            }
+            return await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task<bool> UpdateMovie(MovieModel movieModel)
@@ -158,6 +267,66 @@ namespace Kino.Infrastructure.Services
             if (movie == null)
                 return false;
             return await _movieRepository.RemoveAsync(movie);
+        }
+
+        public async Task<bool> DeleteCountries(CountriesRequest countriesRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(countriesRequest.MovieId);
+            if (movie == null || movie.Countries == null || !movie.Countries.Any())
+                return false;
+            foreach (var countryName in countriesRequest.Countries)
+            {
+                var country = await _countryRepository.SingleOrDefaultAsync(x => x.CountryName == countryName);
+                if (country == null)
+                    return false;
+                else (movie.Countries as List<Country>)?.RemoveAll(x => x.Id == country.Id);
+            }
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> DeleteGenres(GenresRequest genresRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(genresRequest.MovieId);
+            if (movie == null || movie.Genres == null || !movie.Genres.Any())
+                return false;
+            foreach (var genreName in genresRequest.Genres)
+            {
+                var genre = await _genreRepository.SingleOrDefaultAsync(x => x.GenreName == genreName);
+                if (genre == null)
+                    return false;
+                else (movie.Genres as List<Genre>)?.RemoveAll(x => x.Id == genre.Id);
+            }
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> DeleteKeywords(KeywordsRequest keywordsRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(keywordsRequest.MovieId);
+            if (movie == null || movie.Keywords == null || !movie.Keywords.Any())
+                return false;
+            foreach (var keywordName in keywordsRequest.Keywords)
+            {
+                var keyword = await _keywordRepository.SingleOrDefaultAsync(x => x.KeywordName == keywordName);
+                if (keyword == null)
+                    return false;
+                else (movie.Keywords as List<Keyword>)?.RemoveAll(x => x.Id == keyword.Id);
+            }
+            return await _movieRepository.UpdateAsync(movie);
+        }
+
+        public async Task<bool> DeleteCompanies(CompaniesRequest companiesRequest)
+        {
+            var movie = await _movieRepository.GetMovieDetailAsTracking(companiesRequest.MovieId);
+            if (movie == null || movie.Companies == null || !movie.Companies.Any())
+                return false;
+            foreach (var companyName in companiesRequest.Companies)
+            {
+                var company = await _companyRepository.SingleOrDefaultAsync(x => x.CompanyName == companyName);
+                if (company == null)
+                    return false;
+                else (movie.Companies as List<ProductionCompany>)?.RemoveAll(x => x.Id == company.Id);
+            }
+            return await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task<bool> MovieExists(int id)

@@ -42,5 +42,15 @@ namespace Kino.Infrastructure.Repositories
                                     .AsNoTracking()
                                     .SingleOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<Movie?> GetMovieDetailAsTracking(int id)
+        {
+            return await _context.Movies
+                                    .Include(x => x.Companies)
+                                    .Include(x => x.Countries)
+                                    .Include(x => x.Genres)
+                                    .Include(x => x.Keywords)
+                                    .SingleOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -2,7 +2,6 @@
 using Kino.Core.Interfaces.Repository;
 using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Common;
-using Kino.Core.Models.Response;
 
 namespace Kino.Infrastructure.Services
 {

@@ -42,6 +42,12 @@ builder.Services.AddScoped<IMovieLanguageService, MovieLanguageService>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 
+builder.Services.AddScoped<IKeywordRepository, KeywordRepository>();
+builder.Services.AddScoped<IKeywordService, KeywordService>();
+
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+
 builder.Services.AddScoped<IGenderRepository, GenderRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepository>();

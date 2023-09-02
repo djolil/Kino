@@ -1,5 +1,6 @@
 ﻿using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Common;
+using Kino.Core.Models.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
@@ -25,6 +26,46 @@ namespace Kino.API.Controllers.Admin
             return Ok(movie);
         }
 
+        // GET: api/MovieAdmin/Country/1
+        [HttpGet("Country/{id}")]
+        public async Task<ActionResult> GetCountries(int id)
+        {
+            var countries = await _movieService.GetCountriesByMovieId(id);
+            if (countries == null)
+                return NotFound();
+            return Ok(countries);
+        }
+
+        // GET: api/MovieAdmin/Genre/1
+        [HttpGet("Genre/{id}")]
+        public async Task<ActionResult> GetGenres(int id)
+        {
+            var genres = await _movieService.GetGenresByMovieId(id);
+            if (genres == null)
+                return NotFound();
+            return Ok(genres);
+        }
+
+        // GET: api/MovieAdmin/Keyword/1
+        [HttpGet("Keyword/{id}")]
+        public async Task<ActionResult> GetKeywords(int id)
+        {
+            var keywords = await _movieService.GetKeywordsByMovieId(id);
+            if (keywords == null)
+                return NotFound();
+            return Ok(keywords);
+        }
+
+        // GET: api/MovieAdmin/Company/1
+        [HttpGet("Company/{id}")]
+        public async Task<ActionResult> GetCompanies(int id)
+        {
+            var companies = await _movieService.GetCompaniesByMovieId(id);
+            if (companies == null)
+                return NotFound();
+            return Ok(companies);
+        }
+
         // POST: api/MovieAdmin
         [HttpPost]
         public async Task<ActionResult> AddMovie(MovieModel movie)
@@ -32,6 +73,50 @@ namespace Kino.API.Controllers.Admin
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
             if (await _movieService.AddMovie(movie) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // POST: api/MovieAdmin/Country
+        [HttpPost("Country")]
+        public async Task<ActionResult> AddCountries(CountriesRequest countries)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.AddCountries(countries) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // POST: api/MovieAdmin/Genre
+        [HttpPost("Genre")]
+        public async Task<ActionResult> AddGenres(GenresRequest genres)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.AddGenres(genres) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // POST: api/MovieAdmin/Keyword
+        [HttpPost("Keyword")]
+        public async Task<ActionResult> AddKeywords(KeywordsRequest keywords)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.AddKeywords(keywords) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // POST: api/MovieAdmin/Company
+        [HttpPost("Company")]
+        public async Task<ActionResult> AddCompanies(CompaniesRequest companies)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.AddCompanies(companies) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -58,6 +143,50 @@ namespace Kino.API.Controllers.Admin
             if (await _movieService.DeleteMovie(id) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return NoContent();
+        }
+
+        // DELETE: api/MovieAdmin/Country
+        [HttpDelete("Country")]
+        public async Task<ActionResult> DeleteCountries(CountriesRequest countries)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.DeleteCountries(countries) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // DELETE: api/MovieAdmin/Genre
+        [HttpDelete("Genre")]
+        public async Task<ActionResult> DeleteGenres(GenresRequest genres)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.DeleteGenres(genres) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // DELETE: api/MovieAdmin/Keyword
+        [HttpDelete("Keyword")]
+        public async Task<ActionResult> DeleteKeywords(KeywordsRequest keywords)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.DeleteKeywords(keywords) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        // DELETE: api/MovieAdmin/Company
+        [HttpDelete("Company")]
+        public async Task<ActionResult> DeleteCompanies(CompaniesRequest companies)
+        {
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+            if (await _movieService.DeleteCompanies(companies) == false)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status201Created);
         }
     }
 }
