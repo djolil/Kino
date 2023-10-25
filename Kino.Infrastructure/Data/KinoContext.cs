@@ -36,6 +36,10 @@ public partial class KinoContext : DbContext
 
     public virtual DbSet<ProductionCompany> ProductionCompanies { get; set; }
 
+    public virtual DbSet<Role> Roles { get; set; }
+
+    public virtual DbSet<UserAccount> UserAccounts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Country>(entity =>
@@ -290,6 +294,47 @@ public partial class KinoContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CompanyName).HasColumnName("company_name");
+        });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("role_pkey");
+
+            entity.ToTable("role");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.RoleName).HasColumnName("role_name");
+        });
+
+        modelBuilder.Entity<UserAccount>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("user_account_pkey");
+
+            entity.ToTable("user_account");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Email).HasColumnName("email");
+            entity.Property(e => e.FirstName).HasColumnName("first_name");
+            entity.Property(e => e.HashedPassword).HasColumnName("hashed_password");
+            entity.Property(e => e.LastName).HasColumnName("last_name");
+            entity.Property(e => e.Salt).HasColumnName("salt");
+
+            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+                .UsingEntity<Dictionary<string, object>>(
+                    "UserRole",
+                    r => r.HasOne<Role>().WithMany()
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("user_role_role_id_fkey"),
+                    l => l.HasOne<UserAccount>().WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("user_role_user_id_fkey"),
+                    j =>
+                    {
+                        j.HasKey("UserId", "RoleId").HasName("user_role_pkey");
+                        j.ToTable("user_role");
+                        j.IndexerProperty<int>("UserId").HasColumnName("user_id");
+                        j.IndexerProperty<int>("RoleId").HasColumnName("role_id");
+                    });
         });
 
         OnModelCreatingPartial(modelBuilder);

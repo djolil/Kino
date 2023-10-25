@@ -1,10 +1,12 @@
 ﻿using Kino.Core.Interfaces.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class KeywordAdminController : ControllerBase
     {
         private readonly IKeywordService _keywordService;

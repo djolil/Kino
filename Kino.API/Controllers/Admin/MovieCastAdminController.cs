@@ -1,11 +1,13 @@
 ﻿using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class MovieCastAdminController : ControllerBase
     {
         private readonly IMovieCastService _movieCastService;
@@ -29,8 +31,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost]
         public async Task<ActionResult> AddMovieCast(MovieCastModel cast)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieCastService.AddMovieCast(cast) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -38,10 +38,8 @@ namespace Kino.API.Controllers.Admin
 
         // PUT: api/MovieCastAdmin
         [HttpPut]
-        public async Task<IActionResult> UpdateMovieCast(MovieCastModel cast)
+        public async Task<ActionResult> UpdateMovieCast(MovieCastModel cast)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieCastService.MovieCastExists(cast) == false)
                 return NotFound();
             if (await _movieCastService.UpdateMovieCast(cast) == false)
@@ -51,7 +49,7 @@ namespace Kino.API.Controllers.Admin
 
         // DELETE: api/MovieCastAdmin
         [HttpDelete]
-        public async Task<IActionResult> DeleteMovieCast(MovieCastModel cast)
+        public async Task<ActionResult> DeleteMovieCast(MovieCastModel cast)
         {
             if (await _movieCastService.MovieCastExists(cast) == false)
                 return NotFound();

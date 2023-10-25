@@ -1,11 +1,13 @@
 ﻿using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class MovieCrewAdminController : ControllerBase
     {
         private readonly IMovieCrewService _movieCrewService;
@@ -29,8 +31,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost]
         public async Task<ActionResult> AddMovieCrew(MovieCrewRequest crew)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieCrewService.AddMovieCrew(crew) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -38,7 +38,7 @@ namespace Kino.API.Controllers.Admin
 
         // DELETE: api/MovieCrewAdmin
         [HttpDelete]
-        public async Task<IActionResult> DeleteMovieCrew(MovieCrewRequest crew)
+        public async Task<ActionResult> DeleteMovieCrew(MovieCrewRequest crew)
         {
             if (await _movieCrewService.MovieCrewExists(crew) == false)
                 return NotFound();

@@ -1,12 +1,14 @@
 ﻿using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Common;
 using Kino.Core.Models.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class MovieAdminController : ControllerBase
     {
         private readonly IMovieService _movieService;
@@ -70,8 +72,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost]
         public async Task<ActionResult> AddMovie(MovieModel movie)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.AddMovie(movie) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -81,8 +81,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost("Country")]
         public async Task<ActionResult> AddCountries(CountriesRequest countries)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.AddCountries(countries) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -92,8 +90,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost("Genre")]
         public async Task<ActionResult> AddGenres(GenresRequest genres)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.AddGenres(genres) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -103,8 +99,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost("Keyword")]
         public async Task<ActionResult> AddKeywords(KeywordsRequest keywords)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.AddKeywords(keywords) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -114,8 +108,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost("Company")]
         public async Task<ActionResult> AddCompanies(CompaniesRequest companies)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.AddCompanies(companies) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -123,10 +115,8 @@ namespace Kino.API.Controllers.Admin
 
         // PUT: api/MovieAdmin
         [HttpPut]
-        public async Task<IActionResult> UpdateMovie(MovieModel movie)
+        public async Task<ActionResult> UpdateMovie(MovieModel movie)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.MovieExists(movie.Id) == false)
                 return NotFound();
             if (await _movieService.UpdateMovie(movie) == false)
@@ -136,7 +126,7 @@ namespace Kino.API.Controllers.Admin
 
         // DELETE: api/MovieAdmin/3
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(int id)
+        public async Task<ActionResult> DeleteMovie(int id)
         {
             if (await _movieService.MovieExists(id) == false)
                 return NotFound();
@@ -149,8 +139,6 @@ namespace Kino.API.Controllers.Admin
         [HttpDelete("Country")]
         public async Task<ActionResult> DeleteCountries(CountriesRequest countries)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.DeleteCountries(countries) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -160,8 +148,6 @@ namespace Kino.API.Controllers.Admin
         [HttpDelete("Genre")]
         public async Task<ActionResult> DeleteGenres(GenresRequest genres)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.DeleteGenres(genres) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -171,8 +157,6 @@ namespace Kino.API.Controllers.Admin
         [HttpDelete("Keyword")]
         public async Task<ActionResult> DeleteKeywords(KeywordsRequest keywords)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.DeleteKeywords(keywords) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -182,8 +166,6 @@ namespace Kino.API.Controllers.Admin
         [HttpDelete("Company")]
         public async Task<ActionResult> DeleteCompanies(CompaniesRequest companies)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieService.DeleteCompanies(companies) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);

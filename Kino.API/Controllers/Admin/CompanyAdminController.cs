@@ -1,10 +1,12 @@
 ﻿using Kino.Core.Interfaces.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class CompanyAdminController : ControllerBase
     {
         private readonly ICompanyService _companyService;

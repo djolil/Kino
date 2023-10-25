@@ -1,11 +1,13 @@
 ﻿using Kino.Core.Interfaces.Service;
 using Kino.Core.Models.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kino.API.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "admin")]
     public class MovieLanguageAdminController : ControllerBase
     {
         private readonly IMovieLanguageService _movieLanguageService;
@@ -29,8 +31,6 @@ namespace Kino.API.Controllers.Admin
         [HttpPost]
         public async Task<ActionResult> AddMovieLanguage(MovieLanguageModel movieLanguage)
         {
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
             if (await _movieLanguageService.AddMovieLanguage(movieLanguage) == false)
                 return StatusCode(StatusCodes.Status500InternalServerError);
             return StatusCode(StatusCodes.Status201Created);
@@ -38,7 +38,7 @@ namespace Kino.API.Controllers.Admin
 
         // DELETE: api/MovieLanguageAdmin
         [HttpDelete]
-        public async Task<IActionResult> DeleteMovieLanguage(MovieLanguageModel movieLanguage)
+        public async Task<ActionResult> DeleteMovieLanguage(MovieLanguageModel movieLanguage)
         {
             if (await _movieLanguageService.MovieLanguageExists(movieLanguage) == false)
                 return NotFound();
